@@ -51,6 +51,8 @@ public class SynchronizedUtils implements ApplicationContextAware {
      * 事务提交后执行
      * 注册的{@link TransactionSynchronization}会被添加到{@link TransactionSynchronizationManager#synchronizations}集合中，然后在合适的时机执行
      * WARN: 同一个事务中不可嵌套，只有最外层会生效。简单的集合遍历问题，遍历过程中不可再往集合中添加元素，{@link org.springframework.transaction.support.TransactionSynchronizationUtils#invokeAfterCommit}
+     * 场景一：异常导致事务回滚，执行一些无法回滚的代码，比如消息推送
+     *
      */
     public static void afterTrxCommit(Runnable runnable){
         if(!TransactionSynchronizationManager.isActualTransactionActive()){
@@ -222,7 +224,7 @@ public class SynchronizedUtils implements ApplicationContextAware {
 
     /**
      * 全局锁并发起新事务
-     * 用途：保证只有一个事务在操作状态，同时是最新状态，注意事务隔离
+     * 用途：保证只有一个事务在操作状态，同时是最新状态，注意事务隔离和行锁
      */
     public static <T> T lockNewTrx(Collection<String> names, Supplier<T> supplier){
         return lock(names, () -> newTrx(supplier));

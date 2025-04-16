@@ -1,5 +1,7 @@
 package cn.cidea.core.utils;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Objects;
@@ -39,11 +41,14 @@ public class BigDecimalUtils {
         return collection.stream()
                 .filter(Objects::nonNull)
                 .map(function::apply)
-                .filter(Objects::nonNull)
+                .filter(StringUtils::isNotBlank)
                 .map(BigDecimal::new)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    /**
+     * 移除科学计数法
+     */
     public static BigDecimal strip(BigDecimal decimal) {
         if (decimal == null) {
             return null;
