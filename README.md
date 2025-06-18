@@ -21,4 +21,7 @@
 - 工具`PackingConvert`，新增一些默认的单位的自动转换，[ml,l]、[mg,g,kg]
 - 工具`HttpRequestBuilder`增加proxy支持
 
+## 0.1.7
+- 修复`SynchronizedUtils`多重锁时释放问题
+
 # feature 
